@@ -1,0 +1,22 @@
+version: '3.7'
+services:
+  postgres:
+    image: postgres:11.5
+    secrets:
+      - postgres_superuser_password
+    deploy:
+      placement:
+        constraints:
+          - node.labels.postgres_node == true
+    environment:
+      POSTGRES_USER: refactored
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_superuser_password
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+    - 5432:5432
+secrets:
+  postgres_superuser_password:
+    external: true
+volumes:
+  db-data:
